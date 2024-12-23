@@ -1,8 +1,8 @@
-import  { useEffect, useState } from 'react';
-import { Table, Input, Card, Space, Tag } from 'antd';
-import type { TablePaginationConfig } from 'antd/es/table';
-// import type { FilterValue } from 'antd/es/table/interface';
-import { SearchOutlined } from '@ant-design/icons';
+import { useEffect, useState } from "react";
+import { Table, Input, Card, Space, Tag } from "antd";
+import type { TablePaginationConfig } from "antd/es/table";
+import type { FilterValue } from "antd/es/table/interface";
+import { SearchOutlined } from "@ant-design/icons";
 
 interface InsightData {
   id: number;
@@ -11,7 +11,9 @@ interface InsightData {
   likelihood: number;
   relevance: number;
   year: number;
-  country: string;
+  countries: {
+    name: string;
+  };
   topics: string[];
   sectors: {
     name: string;
@@ -28,7 +30,7 @@ interface TableParams {
 const Insights = () => {
   const [data, setData] = useState<InsightData[]>([]);
   const [loading, setLoading] = useState(false);
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState("");
   const [tableParams, setTableParams] = useState<TableParams>({
     pagination: {
       current: 1,
@@ -41,9 +43,12 @@ const Insights = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        `http://localhost:3008/insights/all?page=${tableParams.pagination?.current || 1}&limit=${tableParams.pagination?.pageSize || 10}`
+        `http://localhost:3008/insights/all?page=${
+          tableParams.pagination?.current || 1
+        }&limit=${tableParams.pagination?.pageSize || 10}`
       );
       const result = await response.json();
+      console.log({ result });
       setData(result.data);
       setTableParams({
         ...tableParams,
@@ -53,7 +58,7 @@ const Insights = () => {
         },
       });
     } catch (error) {
-      console.error('Error fetching insights:', error);
+      console.error("Error fetching insights:", error);
     } finally {
       setLoading(false);
     }
@@ -65,7 +70,7 @@ const Insights = () => {
 
   const handleTableChange = (
     pagination: TablePaginationConfig,
-    // filters: Record<string, FilterValue | null>,
+    filters: Record<string, FilterValue | null>
   ) => {
     setTableParams({
       pagination,
@@ -86,64 +91,47 @@ const Insights = () => {
     const searchLower = searchText.toLowerCase();
     return (
       item.title?.toLowerCase().includes(searchLower) ||
-      item.country?.toLowerCase().includes(searchLower) ||
+      item.countries?.name?.toLowerCase().includes(searchLower) ||
       item.sectors?.name?.toLowerCase().includes(searchLower) ||
       item.regions?.name?.toLowerCase().includes(searchLower) ||
-      item.topics?.some(topic => topic.toLowerCase().includes(searchLower))
+      item.topics?.some((topic) => topic.toLowerCase().includes(searchLower))
     );
   });
 
   const columns = [
     {
-      title: 'Title',
-      dataIndex: 'title',
-      key: 'title',
-      width: '30%',
+      title: "Title",
+      dataIndex: "title",
+      key: "title",
+      width: "30%",
       render: (text: string) => (
-        <div style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}>{text}</div>
+        <div style={{ whiteSpace: "normal", wordWrap: "break-word" }}>
+          {text}
+        </div>
       ),
     },
     {
-      title: 'Sector',
-      dataIndex: ['sectors', 'name'],
-      key: 'sector',
+      title: "Sector",
+      dataIndex: ["sectors", "name"],
+      key: "sector",
       render: (text: string) => <Tag color="blue">{text}</Tag>,
     },
     {
-      title: 'Region',
-      dataIndex: ['regions', 'name'],
-      key: 'region',
+      title: "Region",
+      dataIndex: ["regions", "name"],
+      key: "region",
       render: (text: string) => <Tag color="green">{text}</Tag>,
     },
     {
-      title: 'Country',
-      dataIndex: 'country',
-      key: 'country',
-      render: (text: string) => <Tag color="green">{text}</Tag>,
+      title: "Country",
+      dataIndex: ["countries", "name"],
+      key: "country",
+      render: (text: string) => <Tag color="red">{text}</Tag>,
     },
+
     {
-      title: 'Year',
-      dataIndex: 'year',
-      key: 'year',
-      sorter: (a: InsightData, b: InsightData) => a.year - b.year,
-    },
-    {
-      title: 'Topics',
-      dataIndex: 'topics',
-      key: 'topics',
-      render: (topics: string[]) => (
-        <Space wrap>
-          {topics?.map((topic) => (
-            <Tag key={topic} color="purple">
-              {topic}
-            </Tag>
-          ))}
-        </Space>
-      ),
-    },
-    {
-      title: 'Metrics',
-      key: 'metrics',
+      title: "Metrics",
+      key: "metrics",
       render: (record: InsightData) => (
         <Space>
           <Tag color="orange">Intensity: {record.intensity}</Tag>
@@ -156,7 +144,7 @@ const Insights = () => {
 
   return (
     <div>
-      <h1 style={{ marginBottom: '24px' }}>All Insights</h1>
+      <h1 style={{ marginBottom: "24px" }}>All Insights</h1>
       <Card>
         <div style={{ marginBottom: 16 }}>
           <Input

@@ -16,13 +16,6 @@ const RegionDistribution = ({ data, loading }: Props) => {
     data,
     xField: 'name',
     yField: 'count',
-    label: {
-      position: 'top',
-      style: {
-        fill: '#000000',
-        opacity: 0.6,
-      },
-    },
     xAxis: {
       label: {
         autoHide: true,

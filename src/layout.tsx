@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate, Outlet, useLocation } from 'react-router-dom';
 import {
   DesktopOutlined,
-  FileOutlined,
   PieChartOutlined,
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
@@ -29,7 +28,6 @@ function getItem(
 const items: MenuItem[] = [
   getItem('Dashboard', '/', <PieChartOutlined />),
   getItem('All insights', '/insights', <DesktopOutlined />),
-  getItem('Files', '/files', <FileOutlined />),
 ];
 
 const SideBar: React.FC = () => {
