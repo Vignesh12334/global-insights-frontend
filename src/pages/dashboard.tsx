@@ -47,7 +47,7 @@ const Dashboard = () => {
 
   const fetchSectorData = async () => {
     try {
-      const response = await fetch('http://localhost:3008/insights/sectors');
+      const response = await fetch('https://global-insights-backend.onrender.com/insights/sectors');
       const data = await response.json();
       setSectorData(data);
     } catch (error) {
@@ -59,7 +59,7 @@ const Dashboard = () => {
 
   const fetchRegionData = async () => {
     try {
-      const response = await fetch('http://localhost:3008/insights/regions');
+      const response = await fetch('https://global-insights-backend.onrender.com/insights/regions');
       const data = await response.json();
       setRegionData(data);
     } catch (error) {
@@ -71,7 +71,7 @@ const Dashboard = () => {
 
   const fetchInsightsOverTime = async () => {
     try {
-      const response = await fetch('http://localhost:3008/insights/insights-over-time');
+      const response = await fetch('https://global-insights-backend.onrender.com/insights/insights-over-time');
       const data = await response.json();
       setInsightsOverTime(data);
     } catch (error) {
@@ -83,7 +83,7 @@ const Dashboard = () => {
 
   const fetchRelevanceLikelihood = async () => {
     try {
-      const response = await fetch('http://localhost:3008/insights/relevance-likelihood');
+      const response = await fetch('https://global-insights-backend.onrender.com/insights/relevance-likelihood');
       const data = await response.json();
     
       const formattedData = data.map((item:any) => ({

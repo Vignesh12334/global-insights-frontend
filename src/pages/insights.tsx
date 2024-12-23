@@ -43,7 +43,7 @@ const Insights = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        `http://localhost:3008/insights/all?page=${
+        `https://global-insights-backend.onrender.com/insights/all?page=${
           tableParams.pagination?.current || 1
         }&limit=${tableParams.pagination?.pageSize || 10}`
       );
