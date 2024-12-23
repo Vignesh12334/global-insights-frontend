@@ -3,7 +3,7 @@ import { Row, Col } from 'antd';
 import SectorDistribution from '../components/SectorDistribution';
 import RegionDistribution from '../components/RegionDistribution';
 import InsightsTimeline from '../components/InsightsTimeline';
-import LikelihoodIntensityChart from '../components/LikelihoodIntensityChart';
+import RelevanceLikelihoodChart from '../components/RelevanceLikelihoodChart';
 
 interface SectorData {
   name: string;
@@ -20,16 +20,6 @@ interface InsightOverTime {
   count: number;
 }
 
-interface LikelihoodIntensity {
-  likelihood: number;
-  intensity: number;
-  title: string;
-  topic: string;
-  sector: string;
-  pestle: string;
-  isOutlier: boolean;
-}
-
 interface RelevanceLikelihood {
   sector: string;
   averageRelevance: number;
@@ -40,13 +30,11 @@ const Dashboard = () => {
   const [sectorData, setSectorData] = useState<SectorData[]>([]);
   const [regionData, setRegionData] = useState<RegionData[]>([]);
   const [insightsOverTime, setInsightsOverTime] = useState<InsightOverTime[]>([]);
-  const [likelihoodIntensity, setLikelihoodIntensity] = useState<LikelihoodIntensity[]>([]);
   const [relevanceLikelihood, setRelevanceLikelihood] = useState<RelevanceLikelihood[]>([]);
   const [loading, setLoading] = useState({
     sectors: true,
     regions: true,
     insightsTime: true,
-    likelihoodIntensity: true,
     relevanceLikelihood: true,
   });
 
@@ -54,7 +42,6 @@ const Dashboard = () => {
     fetchSectorData();
     fetchRegionData();
     fetchInsightsOverTime();
-    fetchLikelihoodIntensity();
     fetchRelevanceLikelihood();
   }, []);
 
@@ -94,23 +81,18 @@ const Dashboard = () => {
     }
   };
 
-  const fetchLikelihoodIntensity = async () => {
-    try {
-      const response = await fetch('http://localhost:3008/insights/likelihood-intensity');
-      const data = await response.json();
-      setLikelihoodIntensity(data);
-    } catch (error) {
-      console.error('Error fetching likelihood intensity data:', error);
-    } finally {
-      setLoading(prev => ({ ...prev, likelihoodIntensity: false }));
-    }
-  };
-
-  const  fetchRelevanceLikelihood = async () => {
+  const fetchRelevanceLikelihood = async () => {
     try {
       const response = await fetch('http://localhost:3008/insights/relevance-likelihood');
       const data = await response.json();
-      setRelevanceLikelihood(data);
+    
+      const formattedData = data.map((item:any) => ({
+        sector: item.sector,
+        averageRelevance: Number(item.averageRelevance),
+        averageLikelihood: Number(item.averageLikelihood)
+      }));
+     
+      setRelevanceLikelihood(formattedData);
     } catch (error) {
       console.error('Error fetching relevance likelihood data:', error);
     } finally {
@@ -139,10 +121,10 @@ const Dashboard = () => {
           </Col>
         </Row>
 
-        {/* Third Row: Scatter Plot */}
+        {/* Third Row: Relevance Likelihood Chart */}
         <Row style={{ marginTop: '24px' }}>
           <Col span={24}>
-            <LikelihoodIntensityChart data={likelihoodIntensity} loading={loading.likelihoodIntensity} />
+            <RelevanceLikelihoodChart data={relevanceLikelihood} loading={loading.relevanceLikelihood} />
           </Col>
         </Row>
       </div>

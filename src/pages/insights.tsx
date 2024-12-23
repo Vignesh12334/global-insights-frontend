@@ -48,7 +48,6 @@ const Insights = () => {
         }&limit=${tableParams.pagination?.pageSize || 10}`
       );
       const result = await response.json();
-      console.log({ result });
       setData(result.data);
       setTableParams({
         ...tableParams,
