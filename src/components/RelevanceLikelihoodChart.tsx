@@ -12,11 +12,11 @@ interface Props {
   loading: boolean;
 }
 
-interface ChartData {
-  sector: string;
-  type: string;
-  value: number;
-}
+// interface ChartData {
+//   sector: string;
+//   type: string;
+//   value: number;
+// }
 
 const RelevanceLikelihoodChart = ({ data, loading }: Props) => {
   const chartData = data.flatMap(item => [

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Table, Input, Card, Space, Tag } from "antd";
 import type { TablePaginationConfig } from "antd/es/table";
-import type { FilterValue } from "antd/es/table/interface";
+// import type { FilterValue } from "antd/es/table/interface";
 import { SearchOutlined } from "@ant-design/icons";
 
 interface InsightData {
@@ -69,7 +69,7 @@ const Insights = () => {
 
   const handleTableChange = (
     pagination: TablePaginationConfig,
-    filters: Record<string, FilterValue | null>
+    // filters: Record<string, FilterValue | null>
   ) => {
     setTableParams({
       pagination,
